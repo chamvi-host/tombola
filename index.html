@@ -31,6 +31,8 @@
       border: 1px solid #ccc;
       font-size: 18px;
       user-select: none;
+      background: #fff;
+    }
     }
     .cell input {
       width: 100%;
@@ -41,8 +43,11 @@
       outline: none;
       background: transparent;
     }
+    .empty {
+      background: #ccc;
+    }
     .marked {
-      background: #4caf50;
+      background: #e53935 !important;
       color: white;
       font-weight: bold;
     }
@@ -91,8 +96,24 @@
         input.maxLength = 2;
 
         input.addEventListener('click', (e) => {
-          if (!editMode) {
+          if (!editMode && !cell.classList.contains('empty')) {
             cell.classList.toggle('marked');
+            e.target.blur();
+          }
+        });
+
+        input.addEventListener('input', () => {
+          if (input.value.trim() === '') {
+            cell.classList.add('empty');
+            cell.classList.remove('marked');
+          } else {
+            cell.classList.remove('empty');
+          }
+        });
+          } else {
+            cell.classList.remove('empty');
+          }
+        });
             e.target.blur();
           }
         });
@@ -104,15 +125,21 @@
 
     function setEditMode(value) {
       editMode = value;
-      document.querySelectorAll('.cell input').forEach(input => {
+      document.querySelectorAll('.cell').forEach(cell => {
+        const input = cell.querySelector('input');
         input.readOnly = !editMode;
+        if (input.value.trim() === '') {
+          cell.classList.add('empty');
+        }
       });
+    });
     }
 
     function resetMarks() {
       document.querySelectorAll('.cell').forEach(cell => {
         cell.classList.remove('marked');
       });
+    });
     }
 
     createCartella();
