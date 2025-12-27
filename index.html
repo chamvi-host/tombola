@@ -18,6 +18,7 @@
     .cartella {
       display: grid;
       grid-template-columns: repeat(9, 1fr);
+      grid-template-rows: repeat(4, 1fr);
       gap: 4px;
       background: white;
       padding: 10px;
@@ -104,55 +105,60 @@
     function createCartella() {
       cartella.innerHTML = '';
 
-      // Casilla superior en el medio
-      const topCell = document.createElement('div');
-      topCell.className = 'cell';
-      const topInput = document.createElement('input');
-      topInput.type = 'text';
-      topInput.maxLength = 2;
-      topInput.addEventListener('input', () => {
-        if (topInput.value.trim() === '') {
-          topCell.classList.remove('number');
-          topCell.classList.remove('marked');
-        } else {
-          topCell.classList.add('number');
-        }
-      });
-      topCell.addEventListener('click', () => {
-        if (!editMode && topCell.classList.contains('number')) {
-          topCell.classList.toggle('marked');
-        }
-      });
-      topCell.appendChild(topInput);
-      // Hacer que esté centrada en toda la fila
-      topCell.style.gridColumn = '5 / 6';
-      cartella.appendChild(topCell);
-
-      for (let i = 0; i < rows * cols; i++) {
+      // Fila superior con una casilla en el medio
+      for (let c = 0; c < cols; c++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
-
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.maxLength = 2;
-
-        input.addEventListener('input', () => {
-          if (input.value.trim() === '') {
-            cell.classList.remove('number');
-            cell.classList.remove('marked');
-          } else {
-            cell.classList.add('number');
-          }
-        });
-
-        cell.addEventListener('click', () => {
-          if (!editMode && cell.classList.contains('number')) {
-            cell.classList.toggle('marked');
-          }
-        });
-
-        cell.appendChild(input);
+        if (c === Math.floor(cols/2)) {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.maxLength = 2;
+          input.addEventListener('input', () => {
+            if (input.value.trim() === '') {
+              cell.classList.remove('number');
+              cell.classList.remove('marked');
+            } else {
+              cell.classList.add('number');
+            }
+          });
+          cell.addEventListener('click', () => {
+            if (!editMode && cell.classList.contains('number')) {
+              cell.classList.toggle('marked');
+            }
+          });
+          cell.appendChild(input);
+        }
         cartella.appendChild(cell);
+      }
+
+      // 3 filas normales de 9 casillas
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.maxLength = 2;
+
+          input.addEventListener('input', () => {
+            if (input.value.trim() === '') {
+              cell.classList.remove('number');
+              cell.classList.remove('marked');
+            } else {
+              cell.classList.add('number');
+            }
+          });
+
+          cell.addEventListener('click', () => {
+            if (!editMode && cell.classList.contains('number')) {
+              cell.classList.toggle('marked');
+            }
+          });
+
+          cell.appendChild(input);
+          cartella.appendChild(cell);
+        }
       }
     }
 
