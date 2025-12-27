@@ -10,60 +10,77 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
+      padding: 10px;
+      margin: 0;
     }
-    h1 { margin-bottom: 10px; }
+    h1 { margin: 10px 0; font-size: 1.2rem; }
+
     .cartella {
       display: grid;
       grid-template-columns: repeat(9, 1fr);
-      gap: 5px;
+      gap: 4px;
       background: white;
-      padding: 15px;
-      border-radius: 10px;
+      padding: 10px;
+      border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 420px; /* ideal para celular */
     }
+
     .cell {
-      width: 55px;
-      height: 55px;
+      aspect-ratio: 1 / 1; /* cuadradas siempre */
       display: flex;
       justify-content: center;
       align-items: center;
       border: 1px solid #999;
-      font-size: 18px;
-      background: #ccc; /* por defecto gris */
+      font-size: clamp(14px, 4vw, 18px);
+      background: #ccc;
     }
+
     .cell input {
       width: 100%;
       height: 100%;
       border: none;
       text-align: center;
-      font-size: 18px;
+      font-size: inherit;
       outline: none;
       background: transparent;
     }
+
     .cell.number {
-      background: #fff; /* con número */
+      background: #fff;
     }
+
     .cell.marked {
-      background: #e53935; /* marcado rojo */
+      background: #e53935;
       color: #fff;
       font-weight: bold;
     }
+
     .controls {
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       display: flex;
-      gap: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
+
     button {
       padding: 8px 12px;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 0.9rem;
     }
+
     .edit { background: #2196f3; color: white; }
     .play { background: #4caf50; color: white; }
     .reset { background: #f44336; color: white; }
+
+    @media (min-width: 768px) {
+      h1 { font-size: 1.5rem; }
+      .cartella { max-width: 500px; }
+    }
   </style>
 </head>
 <body>
