@@ -2,16 +2,17 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Cartella de Tómbola</title>
+  <title>Cartella de Tómbola Editable</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      padding: 20px;
     }
+    h1 { margin-bottom: 10px; }
     .cartella {
       display: grid;
       grid-template-columns: repeat(9, 1fr);
@@ -22,56 +23,100 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
     .cell {
-      width: 50px;
-      height: 50px;
+      width: 55px;
+      height: 55px;
       display: flex;
       justify-content: center;
       align-items: center;
       border: 1px solid #ccc;
-      cursor: pointer;
       font-size: 18px;
       user-select: none;
+    }
+    .cell input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      text-align: center;
+      font-size: 18px;
+      outline: none;
+      background: transparent;
     }
     .marked {
       background: #4caf50;
       color: white;
       font-weight: bold;
     }
-    .empty {
-      background: #eee;
-      cursor: default;
+    .controls {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
     }
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .edit { background: #2196f3; color: white; }
+    .play { background: #4caf50; color: white; }
+    .reset { background: #f44336; color: white; }
   </style>
 </head>
 <body>
+  <h1>Cartella de Tómbola</h1>
+
+  <div class="controls">
+    <button class="edit" onclick="setEditMode(true)">✏️ Editar</button>
+    <button class="play" onclick="setEditMode(false)">▶️ Jugar</button>
+    <button class="reset" onclick="resetMarks()">🧹 Limpiar marcas</button>
+  </div>
+
   <div class="cartella" id="cartella"></div>
 
   <script>
-    // Ejemplo de cartella (como la física)
-    const numbers = [
-      [1, 0, 12, 0, 25, 0, 47, 0, 89],
-      [0, 8, 0, 33, 0, 46, 0, 62, 0],
-      [5, 0, 18, 0, 29, 0, 55, 0, 77]
-    ];
-
+    const rows = 3;
+    const cols = 9;
     const cartella = document.getElementById('cartella');
+    let editMode = true;
 
-    numbers.flat().forEach(num => {
-      const cell = document.createElement('div');
-      cell.classList.add('cell');
+    function createCartella() {
+      cartella.innerHTML = '';
+      for (let i = 0; i < rows * cols; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
 
-      if (num === 0) {
-        cell.classList.add('empty');
-        cell.textContent = '';
-      } else {
-        cell.textContent = num;
-        cell.addEventListener('click', () => {
-          cell.classList.toggle('marked');
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.maxLength = 2;
+
+        input.addEventListener('click', (e) => {
+          if (!editMode) {
+            cell.classList.toggle('marked');
+            e.target.blur();
+          }
         });
-      }
 
-      cartella.appendChild(cell);
-    });
+        cell.appendChild(input);
+        cartella.appendChild(cell);
+      }
+    }
+
+    function setEditMode(value) {
+      editMode = value;
+      document.querySelectorAll('.cell input').forEach(input => {
+        input.readOnly = !editMode;
+      });
+    }
+
+    function resetMarks() {
+      document.querySelectorAll('.cell').forEach(cell => {
+        cell.classList.remove('marked');
+      });
+    }
+
+    createCartella();
+    setEditMode(true);
   </script>
 </body>
 </html>
