@@ -15,6 +15,61 @@
     }
     h1 { margin: 10px 0; font-size: 1.2rem; }
 
+    .cartella {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 4px;
+      background: white;
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .cell {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      border: 1px solid #999;
+      font-size: clamp(14px, 4vw, 18px);
+      background: #ccc;
+      position: relative;
+      padding-top: 5px;
+    }
+
+    .top-number {
+      width: 100%;
+      text-align: center;
+      font-size: 0.8em;
+      margin-bottom: 4px;
+      border: none;
+      background: transparent;
+      outline: none;
+    }
+
+    .cell input.cell-number {
+      width: 80%;
+      height: 60%;
+      border: none;
+      text-align: center;
+      font-size: inherit;
+      outline: none;
+      background: transparent;
+    }
+
+    .cell.number {
+      background: #fff;
+    }
+
+    .cell.marked {
+      background: #e53935;
+      color: #fff;
+      font-weight: bold;
+    }
+
     .controls {
       margin-bottom: 10px;
       display: flex;
@@ -35,58 +90,6 @@
     .play { background: #4caf50; color: white; }
     .reset { background: #f44336; color: white; }
 
-    .cartella {
-      display: grid;
-      grid-template-columns: repeat(9, 1fr);
-      gap: 4px;
-      background: white;
-      padding: 10px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      width: 100%;
-      max-width: 420px;
-    }
-
-    .cell {
-      aspect-ratio: 1 / 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border: 1px solid #999;
-      font-size: clamp(14px, 4vw, 18px);
-      background: #ccc;
-      position: relative;
-    }
-
-    .cell input {
-      width: 100%;
-      height: 100%;
-      border: none;
-      text-align: center;
-      font-size: inherit;
-      outline: none;
-      background: transparent;
-    }
-
-    .cell .top-number {
-      position: absolute;
-      top: 2px;
-      font-size: 0.6em;
-      color: #000;
-      cursor: text;
-    }
-
-    .cell.number {
-      background: #fff;
-    }
-
-    .cell.marked {
-      background: #e53935;
-      color: #fff;
-      font-weight: bold;
-    }
-
     @media (min-width: 768px) {
       h1 { font-size: 1.5rem; }
       .cartella { max-width: 500px; }
@@ -95,6 +98,7 @@
 </head>
 <body>
   <h1>Cartella de Tómbola</h1>
+
   <div class="controls">
     <button class="edit" onclick="setEditMode(true)">✏️ Editar</button>
     <button class="play" onclick="setEditMode(false)">▶️ Jugar</button>
@@ -115,18 +119,16 @@
         const cell = document.createElement('div');
         cell.className = 'cell';
 
-        const topNum = document.createElement('input');
-        topNum.className = 'top-number';
-        topNum.type = 'text';
-        topNum.value = (i % 10) + 1; // número por defecto
-        topNum.maxLength = 2;
-        topNum.addEventListener('input', () => {
-          if (topNum.value.trim() === '') topNum.value = '';
-        });
-        cell.appendChild(topNum);
+        const topNumber = document.createElement('input');
+        topNumber.type = 'text';
+        topNumber.className = 'top-number';
+        topNumber.maxLength = 2;
+        topNumber.value = '';
+        cell.appendChild(topNumber);
 
         const input = document.createElement('input');
         input.type = 'text';
+        input.className = 'cell-number';
         input.maxLength = 2;
 
         input.addEventListener('input', () => {
@@ -139,7 +141,7 @@
         });
 
         cell.addEventListener('click', (e) => {
-          if (!editMode && cell.classList.contains('number') && e.target !== topNum) {
+          if (!editMode && cell.classList.contains('number') && e.target !== topNumber) {
             cell.classList.toggle('marked');
           }
         });
