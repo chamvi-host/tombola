@@ -28,11 +28,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      border: 1px solid #ccc;
+      border: 1px solid #999;
       font-size: 18px;
-      user-select: none;
-      background: #fff;
-    }
+      background: #ccc; /* por defecto gris */
     }
     .cell input {
       width: 100%;
@@ -43,12 +41,12 @@
       outline: none;
       background: transparent;
     }
-    .empty {
-      background: #ccc;
+    .cell.number {
+      background: #fff; /* con número */
     }
-    .marked {
-      background: #e53935 !important;
-      color: white;
+    .cell.marked {
+      background: #e53935; /* marcado rojo */
+      color: #fff;
       font-weight: bold;
     }
     .controls {
@@ -95,26 +93,18 @@
         input.type = 'text';
         input.maxLength = 2;
 
-        input.addEventListener('click', (e) => {
-          if (!editMode && !cell.classList.contains('empty')) {
-            cell.classList.toggle('marked');
-            e.target.blur();
+        input.addEventListener('input', () => {
+          if (input.value.trim() === '') {
+            cell.classList.remove('number');
+            cell.classList.remove('marked');
+          } else {
+            cell.classList.add('number');
           }
         });
 
-        input.addEventListener('input', () => {
-          if (input.value.trim() === '') {
-            cell.classList.add('empty');
-            cell.classList.remove('marked');
-          } else {
-            cell.classList.remove('empty');
-          }
-        });
-          } else {
-            cell.classList.remove('empty');
-          }
-        });
-            e.target.blur();
+        cell.addEventListener('click', () => {
+          if (!editMode && cell.classList.contains('number')) {
+            cell.classList.toggle('marked');
           }
         });
 
@@ -125,21 +115,15 @@
 
     function setEditMode(value) {
       editMode = value;
-      document.querySelectorAll('.cell').forEach(cell => {
-        const input = cell.querySelector('input');
+      document.querySelectorAll('.cell input').forEach(input => {
         input.readOnly = !editMode;
-        if (input.value.trim() === '') {
-          cell.classList.add('empty');
-        }
       });
-    });
     }
 
     function resetMarks() {
       document.querySelectorAll('.cell').forEach(cell => {
         cell.classList.remove('marked');
       });
-    });
     }
 
     createCartella();
