@@ -105,33 +105,32 @@
     function createCartella() {
       cartella.innerHTML = '';
 
-      // Fila superior con una casilla en el medio
-      for (let c = 0; c < cols; c++) {
-        const cell = document.createElement('div');
-        cell.className = 'cell';
-        if (c === Math.floor(cols/2)) {
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.maxLength = 2;
-          input.addEventListener('input', () => {
-            if (input.value.trim() === '') {
-              cell.classList.remove('number');
-              cell.classList.remove('marked');
-            } else {
-              cell.classList.add('number');
-            }
-          });
-          cell.addEventListener('click', () => {
-            if (!editMode && cell.classList.contains('number')) {
-              cell.classList.toggle('marked');
-            }
-          });
-          cell.appendChild(input);
-        }
-        cartella.appendChild(cell);
-      }
+      // Primera fila horizontal única con casilla editable en el medio
+      const topCell = document.createElement('div');
+      topCell.className = 'cell';
+      topCell.style.gridColumn = '1 / -1'; // ocupa toda la fila
 
-      // 3 filas normales de 9 casillas
+      const topInput = document.createElement('input');
+      topInput.type = 'text';
+      topInput.maxLength = 2;
+      topInput.style.width = '40%';
+      topInput.addEventListener('input', () => {
+        if (topInput.value.trim() === '') {
+          topCell.classList.remove('number');
+          topCell.classList.remove('marked');
+        } else {
+          topCell.classList.add('number');
+        }
+      });
+      topCell.addEventListener('click', () => {
+        if (!editMode && topCell.classList.contains('number')) {
+          topCell.classList.toggle('marked');
+        }
+      });
+      topCell.appendChild(topInput);
+      cartella.appendChild(topCell);
+
+      // 3 filas normales de 9 casillas cada una
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const cell = document.createElement('div');
