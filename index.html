@@ -17,8 +17,7 @@
 
     .cartella {
       display: grid;
-      grid-template-columns: repeat(9, 1fr);
-      grid-template-rows: repeat(4, 1fr);
+      grid-template-columns: repeat(8, 1fr);
       gap: 4px;
       background: white;
       padding: 10px;
@@ -98,39 +97,40 @@
 
   <script>
     const rows = 3;
-    const cols = 9;
+    const cols = 8;
     const cartella = document.getElementById('cartella');
     let editMode = true;
 
     function createCartella() {
       cartella.innerHTML = '';
 
-      // Primera fila horizontal única con casilla editable en el medio
-      const topCell = document.createElement('div');
-      topCell.className = 'cell';
-      topCell.style.gridColumn = '1 / -1'; // ocupa toda la fila
-
-      const topInput = document.createElement('input');
-      topInput.type = 'text';
-      topInput.maxLength = 2;
-      topInput.style.width = '40%';
-      topInput.addEventListener('input', () => {
-        if (topInput.value.trim() === '') {
-          topCell.classList.remove('number');
-          topCell.classList.remove('marked');
-        } else {
-          topCell.classList.add('number');
+      // Fila superior: solo una casilla en el medio editable
+      for (let c = 0; c < cols; c++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        if (c === Math.floor(cols / 2)) {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.maxLength = 2;
+          input.addEventListener('input', () => {
+            if (input.value.trim() === '') {
+              cell.classList.remove('number');
+              cell.classList.remove('marked');
+            } else {
+              cell.classList.add('number');
+            }
+          });
+          cell.addEventListener('click', () => {
+            if (!editMode && cell.classList.contains('number')) {
+              cell.classList.toggle('marked');
+            }
+          });
+          cell.appendChild(input);
         }
-      });
-      topCell.addEventListener('click', () => {
-        if (!editMode && topCell.classList.contains('number')) {
-          topCell.classList.toggle('marked');
-        }
-      });
-      topCell.appendChild(topInput);
-      cartella.appendChild(topCell);
+        cartella.appendChild(cell);
+      }
 
-      // 3 filas normales de 9 casillas cada una
+      // 3 filas verticales de 9 casillas cada una
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const cell = document.createElement('div');
