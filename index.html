@@ -121,7 +121,10 @@
             }
           });
           cell.addEventListener('click', () => {
-            if (!editMode && cell.classList.contains('number')) {
+            const inputEl = cell.querySelector('input');
+            if (editMode && inputEl) {
+              inputEl.focus();
+            } else if (!editMode && cell.classList.contains('number')) {
               cell.classList.toggle('marked');
             }
           });
